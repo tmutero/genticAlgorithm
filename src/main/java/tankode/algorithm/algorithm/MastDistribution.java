@@ -2,29 +2,9 @@ package tankode.algorithm.algorithm;
 
 import java.util.Random;
 
-/**
- * {@code MastDistribution}s are distributions of {@code TransmitterMast}s
- * which are stored as one map of masts and one of resulting signal strengths.
- * This class offers functions for placing and removing masts and tells the
- * total cost and the number of sufficiently covered areas.</br>
- * 
- * Multiple {@code MastDistribution}s form a {@code Generation}.</br></br>
- * 
- * The goal is to find a distribution that provides at least 90% of all areas
- * with a signal strength of 3 or above and is as inexpensive as possible.
- * 
- * @author Andreas Burmeister
- * 
- * @version 0.3.2 05/27/14
- * 
- * @see TransmitterMast
- * @see Generation
- */
-
 public class MastDistribution {
 	
 	private long overallCost;
-	//The total price for the configuration.
 	
 	public long getOverallCost() {
 		return this.overallCost;
@@ -38,16 +18,15 @@ public class MastDistribution {
 	}
 	
 	private TransmitterMast[][] mastMap =
-		new TransmitterMast[CountryMap.mapHeight][CountryMap.mapWidth];
-	//A two-dimensional array to store where which masts are placed.
+		new TransmitterMast[CancerMap.mapHeight][CancerMap.mapWidth];
 	
 	public TransmitterMast[][] getMastMap() {
 		return this.mastMap;
 	}
 	
 	private int[][] coverageMap =
-		new int[CountryMap.mapHeight][CountryMap.mapWidth];
-	//A two-dimensional array to store how well which areas are covered.
+		new int[CancerMap.mapHeight][CancerMap.mapWidth];
+
 	
 	public int[][] getCoverageMap() {
 		return this.coverageMap;
@@ -57,9 +36,9 @@ public class MastDistribution {
 	//Tells how many areas are covered with sufficient signal strength (>=3).
 		int coverage = 0;
 		int[][] coveragemap = this.coverageMap;
-		for(int row = 0; row < CountryMap.mapHeight; row++) {
-			for(int col = 0; col < CountryMap.mapWidth; col++) {
-				if (CountryMap.countryMap[row][col] == 1)
+		for(int row = 0; row < CancerMap.mapHeight; row++) {
+			for(int col = 0; col < CancerMap.mapWidth; col++) {
+				if (CancerMap.cancerMap[row][col] == 1)
 					coverage += (coveragemap[row][col] >= 3 ? 1 : 0);
 			}
 		}
@@ -69,18 +48,18 @@ public class MastDistribution {
 	public void addMast(TransmitterMast mast, int posX, int posY)
 	throws Exception {
 	//Places a mast at the given coordinates.
-		if (!(posY<0||posY>=CountryMap.mapHeight||
-			posX<0||posX>=CountryMap.mapWidth)) {
-				if (!(CountryMap.countryMap[posY][posX] == 0)) {
+		if (!(posY<0||posY>=CancerMap.mapHeight||
+			posX<0||posX>=CancerMap.mapWidth)) {
+				if (!(CancerMap.cancerMap[posY][posX] == 0)) {
 					if (this.mastMap[posY][posX] == null) {
 						this.mastMap[posY][posX] = mast;
 						int[][] coverage = mast.getAreaOfCoverage();
 						for (int row = 0; row < 9; row++) {
 							for (int col = 0; col < 9; col++) {
 								if (!(posY+row-4<0||
-									posY+row-4>=CountryMap.mapHeight||
+									posY+row-4>=CancerMap.mapHeight||
 									posX-col+4<0||
-									posX-col+4>=CountryMap.mapWidth))
+									posX-col+4>=CancerMap.mapWidth))
 										this.coverageMap
 											[posY+row-4][posX-col+4]
 											+= coverage[row][col];
@@ -108,17 +87,17 @@ public class MastDistribution {
 	public void removeMast(int posX, int posY)
 	throws Exception {
 	//Removes a mast from the given coordinates.
-		if (!(posY<0||posY>=CountryMap.mapHeight||
-			posX<0||posX>=CountryMap.mapWidth)) {
+		if (!(posY<0||posY>=CancerMap.mapHeight||
+			posX<0||posX>=CancerMap.mapWidth)) {
 				if (!(this.mastMap[posY][posX] == null)) {
 					this.overallCost-=mastMap[posY][posX].getCost();
 					int[][] coverage = mastMap[posY][posX].getAreaOfCoverage();
 					for (int row = 0; row < 9; row++) {
 						for (int col = 0; col < 9; col++) {
 							if (!(posY+row-4<0||
-								posY+row-4>=CountryMap.mapHeight||
+								posY+row-4>=CancerMap.mapHeight||
 								posX-col+4<0||
-								posX-col+4>=CountryMap.mapWidth))
+								posX-col+4>=CancerMap.mapWidth))
 									this.coverageMap[posY+row-4][posX-col+4] -=
 										coverage[row][col];
 						}
@@ -140,8 +119,8 @@ public class MastDistribution {
 	public TransmitterMast.MastType checkMast(int posX, int posY)
 	throws Exception {
 	//Tells what type of mast is placed at the given coordinates.
-		if (!(posY<0||posY>=CountryMap.mapHeight||
-			posX<0||posX>=CountryMap.mapWidth)) {
+		if (!(posY<0||posY>=CancerMap.mapHeight||
+			posX<0||posX>=CancerMap.mapWidth)) {
 				if (!(this.mastMap[posY][posX] == null)) {
 					return this.mastMap[posY][posX].getMastType();
 				} else {
@@ -158,8 +137,8 @@ public class MastDistribution {
 	
 	public void clear() {
 	//Deletes all entries of masts for this MastDistribution.
-		for (int row = 0; row < CountryMap.mapHeight; row++) {
-			for (int col = 0; col < CountryMap.mapWidth; col++) {
+		for (int row = 0; row < CancerMap.mapHeight; row++) {
+			for (int col = 0; col < CancerMap.mapWidth; col++) {
 				this.mastMap[row][col] = null;
 				this.coverageMap[row][col] = 0;
 				this.overallCost = 0;
@@ -192,8 +171,8 @@ public class MastDistribution {
 			}
 			try {
 				this.addMast(mast,
-					(int)(Math.random()*CountryMap.mapWidth-1),
-					(int)(Math.random()*CountryMap.mapHeight-1));
+					(int)(Math.random()*CancerMap.mapWidth-1),
+					(int)(Math.random()*CancerMap.mapHeight-1));
 			} catch (Exception ex) {
 			}
 		}

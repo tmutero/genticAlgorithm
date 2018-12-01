@@ -1,12 +1,6 @@
 package tankode.algorithm.algorithm;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 
 
@@ -77,11 +71,11 @@ public class Evolution {
 	private void check() {
 		MastDistribution[] individuals = currentGeneration.getIndividuals();
 		for (int i = 0; i < individuals.length; i++) {
-			if (individuals[i].coverage() > minCoverage*CountryMap.countrySize &&
+			if (individuals[i].coverage() > minCoverage*CancerMap.countrySize &&
 				individuals[i].getOverallCost() < budget) {
 				solution = individuals[i];
 				int a = solution.coverage();
-				int b = CountryMap.countrySize;
+				int b = CancerMap.countrySize;
 				System.out.println(
 					"HEUREKA!\n" +
 					"Generation: " + generationNumber +
@@ -177,7 +171,7 @@ public class Evolution {
 		// Print stats of best individual
 		if (output) {
 			MastDistribution best = next.get(0);
-			float coverage = (float) best.coverage() / CountryMap.countrySize;
+			float coverage = (float) best.coverage() / CancerMap.countrySize;
 			float cost = (float) best.getOverallCost() / budget;
 			float rate = 1 / (float) Math.pow(1 + (double) generationNumber / 1000.0, 2.0);
 			System.out.println("Generation: " + generationNumber + ", Coverage: " + coverage +  ", Cost: " + cost + ", Rate: " + rate);
@@ -196,7 +190,7 @@ public class Evolution {
 	public float rateFitness(MastDistribution individual) {
 		// Get measurements
 		double cost = (double) individual.getOverallCost() / budget;
-		double coverage = (double) individual.coverage() / CountryMap.countrySize;
+		double coverage = (double) individual.coverage() / CancerMap.countrySize;
 		
 		// Logarithmic raise for good coverage or too expensive distributions
 		// Graph at http://goo.gl/X0LguK
@@ -252,8 +246,8 @@ public class Evolution {
 	public MastDistribution crossover(MastDistribution... parentIndividuals) {
 		Random random = new Random(System.currentTimeMillis());
 		MastDistribution result = new MastDistribution();
-		for (int y = 0; y < CountryMap.mapHeight; ++y) {
-			for (int x = 0; x < CountryMap.mapWidth; ++x) {
+		for (int y = 0; y < CancerMap.mapHeight; ++y) {
+			for (int x = 0; x < CancerMap.mapWidth; ++x) {
 				int choice = random.nextInt(parentIndividuals.length);
 				TransmitterMast mast = parentIndividuals[choice].getMastMap()[y][x];
 				if (mast != null) {
@@ -308,10 +302,10 @@ public class Evolution {
 			
 			// Find valid coordinates
 			for (int abort = 0; abort < 10; ++abort) {
-				int x = random.nextInt(CountryMap.mapWidth);
-				int y = random.nextInt(CountryMap.mapHeight);
+				int x = random.nextInt(CancerMap.mapWidth);
+				int y = random.nextInt(CancerMap.mapHeight);
 				Point point = new Point(x, y);
-				if (CountryMap.countryMap[y][x] != 0 && masts.get(point) == null) {
+				if (CancerMap.cancerMap[y][x] != 0 && masts.get(point) == null) {
 					masts.put(point, mast);
 					break;
 				}
@@ -364,11 +358,11 @@ public class Evolution {
 				Point place = new Point(x, y);
 				
 				// Skip if out of country or already blocked
-				if (0 > x || x > CountryMap.mapWidth - 1)
+				if (0 > x || x > CancerMap.mapWidth - 1)
 					continue;
-				if (0 > y || y > CountryMap.mapHeight - 1)
+				if (0 > y || y > CancerMap.mapHeight - 1)
 					continue;
-				if (CountryMap.countryMap[y][x] == 0)
+				if (CancerMap.cancerMap[y][x] == 0)
 					continue;
 				if (masts.get(place) != null)
 					continue;

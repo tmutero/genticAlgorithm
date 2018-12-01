@@ -1,16 +1,9 @@
 package tankode.algorithm.algorithm;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 /**
  * A class that opens a frame in order to show the {@code generationSize}
@@ -116,9 +109,9 @@ public class EvolutionGUI implements ActionListener {
 		//number of columns needed
 		
 		private int xSize = //horizontal size of a single map
-			CountryMap.mapWidth*size+(CountryMap.mapWidth-1)*padding+2*spacing;
+			CancerMap.mapWidth*size+(CancerMap.mapWidth-1)*padding+2*spacing;
 		private int ySize = //vertical size of a single map
-			CountryMap.mapHeight*size+(CountryMap.mapHeight-1)*padding+2*spacing;
+			CancerMap.mapHeight*size+(CancerMap.mapHeight-1)*padding+2*spacing;
 		
 		public Dimension getPreferredSize() {
 			return new Dimension(
@@ -142,15 +135,15 @@ public class EvolutionGUI implements ActionListener {
 				g.setColor(Color.black);
 				g.drawRect(xCoord, yCoord, xSize, ySize);
 				int[][] coveragemap = individual.getCoverageMap();
-				int[][] countrymap =
-					CountryMap.countryMap;
-				for(int row = 0; row < CountryMap.mapHeight; row++) {
-					for(int col = 0; col < CountryMap.mapWidth; col++) {
+				int[][] cancermap =
+					CancerMap.cancerMap;
+				for(int row = 0; row < CancerMap.mapHeight; row++) {
+					for(int col = 0; col < CancerMap.mapWidth; col++) {
 						int coverage =
 							Math.min(coveragemap[row][col], this.colors.length-1);
 						int xPos = col*(size+padding)+spacing+xCoord;
 						int yPos = row*(size+padding)+spacing+yCoord;
-						if (countrymap[row][col] == 0) {
+						if (cancermap[row][col] == 0) {
 							g.setColor(new Color(
 								this.color[0],
 								this.color[1],
@@ -162,7 +155,7 @@ public class EvolutionGUI implements ActionListener {
 								this.colors[coverage][2]));
 						}
 						g.fillRect(xPos, yPos, size, size);
-						if (countrymap[row][col] == 1) {
+						if (cancermap[row][col] == 1) {
 							g.setColor(Color.black);
 							g.drawRect(xPos, yPos, size, size);
 						}

@@ -1,17 +1,5 @@
 package tankode.algorithm.algorithm;
 
-/**
- * A {@code Generation} consists of a number of individuals, in this case
- * {@code MastDistribution}s. This class offers some basic functionality such
- * as randomization to work with a Generation (as in {@code Evolution}).
- * 
- * @author Andreas Burmeister
- * 
- * @version 0.2.2 05/27/14
- * 
- * @see MastDistribution
- * @see Evolution
- */
 
 public class Generation {
 	

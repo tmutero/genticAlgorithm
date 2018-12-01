@@ -1,20 +1,5 @@
 package tankode.algorithm.algorithm;
 
-/**
- * {@code TransmitterMast}s have to be distributed over the map - each mast has
- * a {@code MastType}, specifying its {@code cost} (how expensive it is) and
- * {@code areaOfCoverage} (where it provides what signal strength). In an area
- * covered by multiple masts, those signal strengths add up. Masts can only be
- * placed inside the country and have to cover it optimally. There can also
- * only be a maximum of one mast per area.</br>
- *
- * @author Andreas Burmeister
- * 
- * @version 0.1.2 05/27/14
- * 
- * @see MastDistribution
- * @see CountryMap
- */
 
 public class TransmitterMast {
 	
